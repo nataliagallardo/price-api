@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface PriceRepository extends JpaRepository<PriceEntity, Long> {
+public interface JpaPriceRepository extends JpaRepository<PriceEntity, Long> {
 
   List<PriceEntity> findByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
       Long brandId,

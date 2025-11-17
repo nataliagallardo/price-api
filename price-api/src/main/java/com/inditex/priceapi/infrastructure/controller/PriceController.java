@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 @RequestMapping("/prices")
 public class PriceController {
 
+
   private final FindPriceUseCase findPriceUseCase;
 
   public PriceController(FindPriceUseCase findPriceUseCase) {
@@ -48,7 +49,7 @@ public class PriceController {
         new BrandId(brandId),
         new ProductId(productId),
         applicationDate
-    ).orElseThrow(() -> new PriceNotFoundException(brandId, productId, applicationDate));
+    ).orElseThrow(() -> new PriceNotFoundException(brandId, productId, applicationDate.toString()));
 
     return ResponseEntity.ok(
         new PriceResponseDto(

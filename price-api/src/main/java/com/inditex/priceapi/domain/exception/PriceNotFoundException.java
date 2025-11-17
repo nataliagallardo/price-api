@@ -1,12 +1,10 @@
 package com.inditex.priceapi.domain.exception;
 
-import java.time.LocalDateTime;
-
 public class PriceNotFoundException extends RuntimeException {
 
-  public PriceNotFoundException(Long brandId, Long productId, LocalDateTime date) {
-    super("No price found for product " + productId +
-        ", brand " + brandId +
-        " at date " + date);
+  private static final String MESSAGE = "No existe un precio para brandId=%d, productId=%d, applicationDate=%s";
+
+  public PriceNotFoundException(Long brandId, Long productId, String applicationDate) {
+    super(String.format(MESSAGE, brandId, productId, applicationDate));
   }
 }

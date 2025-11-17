@@ -3,17 +3,21 @@ package com.inditex.priceapi.infrastructure.repository.adapter;
 import com.inditex.priceapi.domain.model.BrandId;
 import com.inditex.priceapi.domain.model.Price;
 import com.inditex.priceapi.domain.model.ProductId;
-import com.inditex.priceapi.infrastructure.repository.jpa.PriceRepository;
+import com.inditex.priceapi.domain.repository.PriceRepository;
+import com.inditex.priceapi.infrastructure.repository.jpa.JpaPriceRepository;
 import com.inditex.priceapi.infrastructure.mapper.PriceMapper;
+import org.springframework.stereotype.Repository;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class PriceRepositoryAdapter implements com.inditex.priceapi.domain.repository.PriceRepository {
+@Repository
+public class PriceRepositoryAdapter implements PriceRepository {
 
-  private final PriceRepository jpaRepository;
+  private final JpaPriceRepository jpaRepository;
   private final PriceMapper mapper;
 
-  public PriceRepositoryAdapter(PriceRepository jpaRepository, PriceMapper priceMapper) {
+  public PriceRepositoryAdapter(JpaPriceRepository jpaRepository, PriceMapper priceMapper) {
     this.jpaRepository = jpaRepository;
     this.mapper = priceMapper;
   }
