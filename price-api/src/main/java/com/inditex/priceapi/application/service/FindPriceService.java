@@ -1,6 +1,7 @@
 package com.inditex.priceapi.application.service;
 
 import com.inditex.priceapi.application.usecase.FindPriceUseCase;
+import com.inditex.priceapi.domain.exception.PriceNotFoundException;
 import com.inditex.priceapi.domain.model.BrandId;
 import com.inditex.priceapi.domain.model.Price;
 import com.inditex.priceapi.domain.model.ProductId;
