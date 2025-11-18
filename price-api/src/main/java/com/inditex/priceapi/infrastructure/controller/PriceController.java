@@ -5,6 +5,7 @@ import com.inditex.priceapi.domain.exception.PriceNotFoundException;
 import com.inditex.priceapi.domain.model.BrandId;
 import com.inditex.priceapi.domain.model.Price;
 import com.inditex.priceapi.domain.model.ProductId;
+import com.inditex.priceapi.infrastructure.PriceResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

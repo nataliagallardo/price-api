@@ -1,4 +1,4 @@
-package com.inditex.priceapi.infrastructure.controller;
+package com.inditex.priceapi.infrastructure;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
