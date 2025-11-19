@@ -29,10 +29,6 @@ public class FindPriceService implements FindPriceUseCase {
 
   @Override
   public PriceResponse findPrice(BrandId brandId, ProductId productId, LocalDateTime date) {
-//    return priceRepository.findByBrandProductAndDate(brandId, productId, date)
-//        .stream()
-//        .max(Comparator.comparing(Price::getPriority));
-//  }
 
     List<Price> prices = priceRepository.findByBrandProductAndDate(brandId, productId, date);
     Price selectedPrice = selectorService.selectPrice(prices);
