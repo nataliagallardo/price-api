@@ -1,11 +1,9 @@
 package com.inditex.priceapi.infrastructure.controller;
 
 import com.inditex.priceapi.application.usecase.FindPriceUseCase;
-import com.inditex.priceapi.domain.exception.PriceNotFoundException;
 import com.inditex.priceapi.domain.model.BrandId;
-import com.inditex.priceapi.domain.model.Price;
 import com.inditex.priceapi.domain.model.ProductId;
-import com.inditex.priceapi.infrastructure.PriceResponseDto;
+import com.inditex.priceapi.application.dto.PriceResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -31,14 +29,13 @@ public class PriceController {
 
   @Operation(
       summary = "Obtiene el precio aplicable",
-      description = "Busca el precio válido para el brandId, productId y fecha de aplicación"
-  )
+      description = "Busca el precio válido para el brandId, productId y fecha de aplicación")
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Precio encontrado"),
       @ApiResponse(responseCode = "404", description = "No se encontró un precio aplicable"),
   })
   @GetMapping
-  public ResponseEntity<?> getPrice(
+  public ResponseEntity<PriceResponse> getPrice(
       @RequestParam Long brandId,
       @RequestParam Long productId,
       @RequestParam
@@ -46,21 +43,11 @@ public class PriceController {
       LocalDateTime applicationDate
   ) {
 
-    Price price = findPriceUseCase.findPrice(
+    PriceResponse response = findPriceUseCase.findPrice(
         new BrandId(brandId),
         new ProductId(productId),
         applicationDate
-    ).orElseThrow(() -> new PriceNotFoundException(brandId, productId, applicationDate.toString()));
-
-    return ResponseEntity.ok(
-        new PriceResponseDto(
-            price.getProductId().getValue(),
-            price.getBrandId().getValue(),
-            price.getPriceList(),
-            price.getStartDate(),
-            price.getEndDate(),
-            price.getPrice()
-        )
     );
+    return ResponseEntity.ok(response);
   }
 }

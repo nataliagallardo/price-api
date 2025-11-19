@@ -1,9 +1,9 @@
-package com.inditex.priceapi.infrastructure;
+package com.inditex.priceapi.application.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public record PriceResponseDto(
+public record PriceResponse(
     Long productId,
     Long brandId,
     Long priceList,
@@ -11,5 +11,4 @@ public record PriceResponseDto(
     LocalDateTime endDate,
     BigDecimal price
 ) {
-
 }

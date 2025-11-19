@@ -1,6 +1,6 @@
-package com.inditex.priceapi.domain.exception;
+package com.inditex.priceapi.infrastructure.exception;
 
-import com.inditex.priceapi.infrastructure.exception.ErrorResponse;
+import com.inditex.priceapi.domain.exception.PriceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

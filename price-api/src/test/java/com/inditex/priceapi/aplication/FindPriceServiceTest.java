@@ -1,10 +1,13 @@
 package com.inditex.priceapi.aplication;
 
+import com.inditex.priceapi.application.dto.PriceResponse;
 import com.inditex.priceapi.application.service.FindPriceService;
+import com.inditex.priceapi.domain.exception.PriceNotFoundException;
 import com.inditex.priceapi.domain.model.BrandId;
 import com.inditex.priceapi.domain.model.Price;
 import com.inditex.priceapi.domain.model.ProductId;
 import com.inditex.priceapi.domain.repository.PriceRepository;
+import com.inditex.priceapi.domain.service.PriceSelectorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,13 +19,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+
+import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 import static org.mockito.Mockito.*;
 
 class FindPriceServiceTest {
 
   @Mock
   private PriceRepository priceRepository;
+
+  @Mock
+  private PriceSelectorService selectorService;
 
   @InjectMocks
   private FindPriceService findPriceService;
@@ -63,18 +70,18 @@ class FindPriceServiceTest {
     when(priceRepository.findByBrandProductAndDate(brandId, productId, date))
         .thenReturn(List.of(lowPriority, highPriority));
 
-    Optional<Price> result = findPriceService.findPrice(brandId, productId, date);
+    when(selectorService.selectPrice(List.of(lowPriority, highPriority)))
+        .thenReturn(highPriority);
 
-    assertThat(result).isPresent();
-    assertThat(result.get().getPriority()).isEqualTo(1);
-    assertThat(result.get().getPriceList()).isEqualTo(2L);
+    PriceResponse result = findPriceService.findPrice(brandId, productId, date);
 
-    verify(priceRepository, times(1))
-        .findByBrandProductAndDate(brandId, productId, date);
+    assertThat(result).isNotNull();
+    assertThat(result.priceList()).isEqualTo(2L);
+    assertThat(result.price()).isEqualTo(BigDecimal.valueOf(25.45));
   }
 
   @Test
-  void returnEmptyWhenNoPricesFound() {
+  void throwsExceptionWhenNoPricesFound() {
     BrandId brandId = new BrandId(1L);
     ProductId productId = new ProductId(35455L);
     LocalDateTime date = LocalDateTime.of(2020, 6, 14, 10, 0);
@@ -82,8 +89,12 @@ class FindPriceServiceTest {
     when(priceRepository.findByBrandProductAndDate(brandId, productId, date))
         .thenReturn(List.of());
 
-    Optional<Price> result = findPriceService.findPrice(brandId, productId, date);
+    when(selectorService.selectPrice(List.of())).thenReturn(null);
 
-    assertThat(result).isEmpty();
+    Throwable thrown = catchThrowable(() ->
+        findPriceService.findPrice(brandId, productId, date)
+    );
+
+    assertThat(thrown).isInstanceOf(PriceNotFoundException.class);
   }
 }
